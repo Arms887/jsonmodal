@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useEffect, useState } from 'react';
+import MyCard from './components/Card/Card';
+import './App.css'
 function App() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(result => result.json())
+      .then(result1 => {
+        setData(result1);
+      })
+      .catch(error => console.error('Ошибка при загрузке:', error));
+  }, []);
+
+  if (!data) return <p>Загрузка...</p>;
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container">
+      <div className="maindiv">
+      {data.map((item) =>{
+        return <MyCard Firsttitle={item.name} SecondTitle={item.username} ModalInfo={item.address}/>
+      })}
+      </div>
+      </div>
     </div>
   );
 }
